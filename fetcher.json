@@ -1,0 +1,19 @@
+[
+  {
+    "id": "2",
+    "title": "cm",
+    "description": "channel myanar app",
+    "min_version": "1.0.0",
+    "date": 1745620310979,
+    "query": {
+      "home_list": [
+        {
+          "title": "ဟင်းချက်နည်းများ",
+          "dom": "#recipe-container .row .mb-2",
+          "elements": {}
+        }
+      ]
+    }
+  }
+  
+]
