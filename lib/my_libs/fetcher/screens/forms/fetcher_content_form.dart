@@ -43,7 +43,19 @@ class _FetcherContentFormState extends State<FetcherContentForm> {
 
   @override
   void dispose() {
+    titleController.dispose();
+    urlController.dispose();
+    descController.dispose();
     super.dispose();
+  }
+
+  void _save() {
+    page.title = titleController.text;
+    page.url = urlController.text;
+    page.desc = descController.text;
+
+    widget.onResult(page);
+    Navigator.pop(context);
   }
 
   @override
@@ -173,8 +185,7 @@ class _FetcherContentFormState extends State<FetcherContentForm> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          widget.onResult(page);
-          Navigator.pop(context);
+          _save();
         },
         child: Icon(Icons.save_as_rounded),
       ),

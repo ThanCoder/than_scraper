@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:t_widgets/t_widgets.dart';
 import 'package:than_pkg/than_pkg.dart';
+import 'package:than_scraper/my_libs/fetcher/notifiers/fetcher_config_services_notifier.dart';
 import 'package:than_scraper/my_libs/fetcher/services/dio_services.dart';
 import 'package:than_scraper/my_libs/setting/app_notifier.dart';
 import 'package:than_scraper/my_libs/setting/setting.dart';
@@ -21,5 +23,13 @@ void main() async {
   //init config
   await Setting.initAppConfigService();
 
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (context) => FetcherConfigServicesNotifier()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }

@@ -1,12 +1,17 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:isolate';
+
 import 'package:than_scraper/my_libs/fetcher/types/fetcher_data_types.dart';
 import 'package:than_scraper/my_libs/fetcher/types/fetcher_query_attr_types.dart';
 import 'package:than_scraper/my_libs/fetcher/types/fetcher_query_selector_types.dart';
 import 'package:than_scraper/my_libs/fetcher/types/page_query.dart';
 
+import '../../setting/path_util.dart';
 import '../types/fetcher_query.dart';
 
 class FetcherConfigServices {
-  static Future<List<PageQuery>> getList() async {
+  static List<PageQuery> getBuildInList() {
     return [
       //Dr Mg Nyo [အပြာစာပေ]
       PageQuery(
@@ -291,4 +296,27 @@ class FetcherConfigServices {
       ),
     ];
   }
+
+  static Future<List<PageQuery>> getList() async {
+    final file = File(getDBPath);
+    return await Isolate.run<List<PageQuery>>(() async {
+      List<PageQuery> list = [];
+      if (!await file.exists()) return list;
+      List<dynamic> resList = jsonDecode(await file.readAsString());
+      list = resList.map((e) => PageQuery.fromMap(e)).toList();
+      return list;
+    });
+  }
+
+  static Future<void> setList(List<PageQuery> list) async {
+    final file = File(getDBPath);
+
+    await Isolate.run(() async {
+      final mapList = list.map((e) => e.toMap).toList();
+      await file.writeAsString(jsonEncode(mapList));
+    });
+  }
+
+  static String get getDBPath =>
+      '${PathUtil.getDatabasePath()}/fetcher_config.db.json';
 }
